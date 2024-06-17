@@ -28,14 +28,13 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import { useUserContext } from './contexts/user';
+import ProtectedRoute from './components/protected-route/ProtectedRoute';
 import AuthPage from './pages/auth-page';
 import DummyPage from './pages/dummy-page';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { user } = useUserContext();
   return (
     <IonApp>
       <IonReactRouter>
@@ -43,12 +42,12 @@ const App: React.FC = () => {
           <Route path="/auth" exact>
             <AuthPage />
           </Route>
-          <Route path="/feed" exact>
-            {user ? <DummyPage page="feed" /> : <Redirect to="/auth" />}
-          </Route>
-          <Route path="/profile" exact>
-            {user ? <DummyPage page="profile" /> : <Redirect to="/auth" />}
-          </Route>
+          <ProtectedRoute path="/feed" exact>
+            <DummyPage page="feed" />
+          </ProtectedRoute>
+          <ProtectedRoute path="/profile" exact>
+            <DummyPage page="profile" />
+          </ProtectedRoute>
           <Route exact path="/">
             <Redirect to="/auth" />
           </Route>
